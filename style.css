@@ -1,0 +1,42 @@
+/* RTL (Right-to-Left) Support */
+body {
+  direction: rtl;
+  text-align: right;
+}
+
+/* Ensure images align properly in RTL */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Fix button alignment in RTL */
+.btn {
+  text-align: center;
+}
+
+/* Ensure card content flows properly in RTL */
+.card-body {
+  text-align: right;
+}
+
+/* Timeline cards styling for RTL */
+section > div {
+  margin-bottom: 2rem;
+  border-right: 3px solid #0071c5;
+  border-left: none;
+  padding-right: 1rem;
+  padding-left: 0;
+}
+
+/* Header styling */
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+/* Newsletter section */
+section:last-of-type {
+  padding: 2rem 1rem;
+  text-align: center;
+}
