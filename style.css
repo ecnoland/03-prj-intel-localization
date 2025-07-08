@@ -513,3 +513,77 @@ a:focus-visible {
     font-size: 0.8em;
     opacity: 0.8;
 }
+
+/* Three-Column Section Styles */
+.three-column-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+}
+
+.three-column-section .custom-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+    height: 100%;
+}
+
+.three-column-section .custom-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.three-column-section .icon-wrapper {
+    margin-bottom: 1.5rem;
+}
+
+.three-column-section .card-title {
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.three-column-section .card-text {
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.three-column-section .learn-more-btn {
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.three-column-section .learn-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* RTL-specific adjustments for three-column section */
+[dir="rtl"] .three-column-section .learn-more-btn .bi-arrow-left:before {
+    content: "\f138"; /* Changes left arrow to right arrow in RTL */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .three-column-section .card-body {
+        padding: 1.5rem;
+    }
+    
+    .three-column-section .icon-wrapper i {
+        font-size: 2.5rem !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .three-column-section .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    
+    .three-column-section .card-body {
+        padding: 1.25rem;
+    }
+}
