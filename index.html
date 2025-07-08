@@ -449,8 +449,175 @@
               
               <!-- Custom JavaScript for Accessibility and Form Validation -->
               <script>
+                // Language detection and RTL/LTR adjustment
+                function detectLanguageAndAdjustLayout() {
+                    // RTL languages list
+                    const rtlLanguages = [
+                        'ar', 'arc', 'dv', 'fa', 'ha', 'he', 'khw', 'ks', 'ku',
+                        'ps', 'ur', 'yi', 'ji', 'iw', 'arabic', 'hebrew', 'persian',
+                        'urdu', 'farsi', 'pashto', 'kurdish', 'yiddish'
+                    ];
+                    
+                    // Function to determine if current language is RTL
+                    function isRTLLanguage() {
+                        // Check html lang attribute
+                        const htmlLang = document.documentElement.lang?.toLowerCase() || '';
+                        
+                        // Check page content for RTL language indicators
+                        const pageText = document.body.innerText?.toLowerCase() || '';
+                        
+                        // Check for Google Translate elements
+                        const gtElement = document.querySelector('.goog-te-combo, .goog-te-banner-frame, [id*="google_translate"]');
+                        let detectedLang = htmlLang;
+                        
+                        // Try to get language from Google Translate
+                        if (gtElement) {
+                            const selectElement = document.querySelector('.goog-te-combo');
+                            if (selectElement && selectElement.value) {
+                                detectedLang = selectElement.value.toLowerCase();
+                            }
+                        }
+                        
+                        // Check if detected language is RTL
+                        const isRTL = rtlLanguages.some(lang => 
+                            detectedLang.includes(lang) || 
+                            htmlLang.includes(lang)
+                        );
+                        
+                        // Additional check for RTL Unicode characters
+                        const rtlPattern = /[\u0590-\u05FF\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+                        const hasRTLChars = rtlPattern.test(pageText);
+                        
+                        return isRTL || hasRTLChars;
+                    }
+                    
+                    // Function to apply RTL/LTR layout
+                    function applyLayout(isRTL) {
+                        const html = document.documentElement;
+                        const body = document.body;
+                        
+                        if (isRTL) {
+                            html.setAttribute('dir', 'rtl');
+                            html.classList.add('rtl-layout');
+                            body.classList.add('rtl-active');
+                            
+                            // Update Bootstrap CSS to RTL version
+                            const bootstrapLink = document.querySelector('link[href*="bootstrap"]');
+                            if (bootstrapLink && !bootstrapLink.href.includes('rtl')) {
+                                bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css';
+                            }
+                            
+                            // Keep timeline section LTR for chronological order
+                            const timelineSection = document.querySelector('.timeline-section');
+                            if (timelineSection) {
+                                timelineSection.setAttribute('dir', 'ltr');
+                            }
+                            
+                            console.log('🔄 RTL layout applied');
+                        } else {
+                            html.setAttribute('dir', 'ltr');
+                            html.classList.remove('rtl-layout');
+                            body.classList.remove('rtl-active');
+                            
+                            // Update Bootstrap CSS to LTR version
+                            const bootstrapLink = document.querySelector('link[href*="bootstrap"]');
+                            if (bootstrapLink && bootstrapLink.href.includes('rtl')) {
+                                bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css';
+                            }
+                            
+                            console.log('🔄 LTR layout applied');
+                        }
+                        
+                        // Announce layout change to screen readers
+                        const announcement = document.createElement('div');
+                        announcement.setAttribute('aria-live', 'polite');
+                        announcement.className = 'sr-only';
+                        announcement.textContent = `Layout changed to ${isRTL ? 'right-to-left' : 'left-to-right'}`;
+                        document.body.appendChild(announcement);
+                        
+                        setTimeout(() => {
+                            document.body.removeChild(announcement);
+                        }, 3000);
+                    }
+                    
+                    // Initial detection
+                    const initialIsRTL = isRTLLanguage();
+                    applyLayout(initialIsRTL);
+                    
+                    // Monitor for changes
+                    let lastDirection = initialIsRTL ? 'rtl' : 'ltr';
+                    
+                    // MutationObserver to detect DOM changes (like Google Translate)
+                    const observer = new MutationObserver((mutations) => {
+                        let shouldCheck = false;
+                        
+                        mutations.forEach((mutation) => {
+                            // Check for attribute changes on html element
+                            if (mutation.type === 'attributes' && 
+                                (mutation.attributeName === 'lang' || mutation.attributeName === 'dir')) {
+                                shouldCheck = true;
+                            }
+                            
+                            // Check for added nodes (Google Translate elements)
+                            if (mutation.type === 'childList') {
+                                mutation.addedNodes.forEach((node) => {
+                                    if (node.nodeType === 1 && 
+                                        (node.classList?.contains('goog-te-banner-frame') ||
+                                         node.id?.includes('google_translate') ||
+                                         node.querySelector?.('.goog-te-combo'))) {
+                                        shouldCheck = true;
+                                    }
+                                });
+                            }
+                        });
+                        
+                        if (shouldCheck) {
+                            setTimeout(() => {
+                                const currentIsRTL = isRTLLanguage();
+                                const currentDirection = currentIsRTL ? 'rtl' : 'ltr';
+                                
+                                if (currentDirection !== lastDirection) {
+                                    applyLayout(currentIsRTL);
+                                    lastDirection = currentDirection;
+                                }
+                            }, 500); // Small delay to let translation complete
+                        }
+                    });
+                    
+                    // Start observing
+                    observer.observe(document.documentElement, {
+                        attributes: true,
+                        childList: true,
+                        subtree: true,
+                        attributeFilter: ['lang', 'dir', 'class']
+                    });
+                    
+                    // Periodic check as fallback
+                    setInterval(() => {
+                        const currentIsRTL = isRTLLanguage();
+                        const currentDirection = currentIsRTL ? 'rtl' : 'ltr';
+                        
+                        if (currentDirection !== lastDirection) {
+                            applyLayout(currentIsRTL);
+                            lastDirection = currentDirection;
+                        }
+                    }, 2000);
+                    
+                    // Listen for language change events
+                    window.addEventListener('languagechange', () => {
+                        setTimeout(() => {
+                            const currentIsRTL = isRTLLanguage();
+                            applyLayout(currentIsRTL);
+                            lastDirection = currentIsRTL ? 'rtl' : 'ltr';
+                        }, 1000);
+                    });
+                }
+                
                 // Form validation and accessibility enhancements
                 document.addEventListener('DOMContentLoaded', function() {
+                    // Initialize language detection
+                    detectLanguageAndAdjustLayout();
+                    
                     const form = document.querySelector('.subscription-form');
                     const emailInput = document.getElementById('email');
                     
