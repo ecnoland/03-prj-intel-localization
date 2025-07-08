@@ -513,6 +513,7 @@
                                 timelineSection.setAttribute('dir', 'ltr');
                             }
                             
+                            updateLanguageIndicator('RTL Active', true);
                             console.log('🔄 RTL layout applied');
                         } else {
                             html.setAttribute('dir', 'ltr');
@@ -525,6 +526,7 @@
                                 bootstrapLink.href = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css';
                             }
                             
+                            updateLanguageIndicator('LTR Active', false);
                             console.log('🔄 LTR layout applied');
                         }
                         
@@ -538,6 +540,38 @@
                         setTimeout(() => {
                             document.body.removeChild(announcement);
                         }, 3000);
+                    }
+                    
+                    // Function to create and update language indicator
+                    function updateLanguageIndicator(text, isRTL) {
+                        let indicator = document.getElementById('language-indicator');
+                        
+                        if (!indicator) {
+                            indicator = document.createElement('div');
+                            indicator.id = 'language-indicator';
+                            indicator.className = 'language-indicator';
+                            indicator.setAttribute('aria-live', 'polite');
+                            document.body.appendChild(indicator);
+                        }
+                        
+                        indicator.textContent = text;
+                        indicator.className = `language-indicator ${isRTL ? 'rtl-active' : 'ltr-active'}`;
+                        
+                        // Auto-hide after 3 seconds
+                        setTimeout(() => {
+                            if (indicator) {
+                                indicator.style.opacity = '0.7';
+                            }
+                        }, 3000);
+                        
+                        // Show on hover
+                        indicator.addEventListener('mouseenter', () => {
+                            indicator.style.opacity = '1';
+                        });
+                        
+                        indicator.addEventListener('mouseleave', () => {
+                            indicator.style.opacity = '0.7';
+                        });
                     }
                     
                     // Initial detection
