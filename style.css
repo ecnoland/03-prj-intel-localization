@@ -479,3 +479,37 @@ a:focus-visible {
         order: initial;
     }
 }
+
+/* Climate Action Plan Button Styling */
+.btn-outline-success.btn-sm {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-outline-success.btn-sm:hover {
+    background-color: #28a745;
+    border-color: #28a745;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.btn-outline-success.btn-sm:focus {
+    box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+    outline: none;
+}
+
+/* Icon spacing in buttons */
+.btn .bi {
+    font-size: 0.9em;
+}
+
+/* External link indicator */
+.btn .bi-box-arrow-up-right {
+    font-size: 0.8em;
+    opacity: 0.8;
+}
