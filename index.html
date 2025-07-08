@@ -763,6 +763,31 @@
                     
                     document.body.insertBefore(skipLink, document.body.firstChild);
                 });
+                
+                // Language detection test functions
+                window.testRTLLayout = function() {
+                    console.log('🧪 Testing RTL layout...');
+                    const html = document.documentElement;
+                    html.setAttribute('lang', 'ar'); // Set to Arabic
+                    html.setAttribute('dir', 'rtl');
+                    
+                    // Trigger the detection system
+                    setTimeout(() => {
+                        detectLanguageAndAdjustLayout();
+                    }, 100);
+                };
+                
+                window.testLTRLayout = function() {
+                    console.log('🧪 Testing LTR layout...');
+                    const html = document.documentElement;
+                    html.setAttribute('lang', 'en'); // Set to English
+                    html.setAttribute('dir', 'ltr');
+                    
+                    // Trigger the detection system
+                    setTimeout(() => {
+                        detectLanguageAndAdjustLayout();
+                    }, 100);
+                };
               </script>
             </body>
             </html>
