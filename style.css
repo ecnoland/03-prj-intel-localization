@@ -345,3 +345,84 @@ a:focus-visible {
     transform: translateX(-50%);
   }
 }
+
+/* Timeline Grid Styles */
+.timeline-section {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.timeline-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.timeline-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1) !important;
+}
+
+.timeline-year-badge {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    min-width: 80px;
+    display: inline-block;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.timeline-card .card-title {
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+.timeline-card .card-text {
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.timeline-card img {
+    transition: transform 0.3s ease;
+}
+
+.timeline-card:hover img {
+    transform: scale(1.05);
+}
+
+/* Color coding for different eras */
+.timeline-card:nth-child(1) .timeline-year-badge,
+.timeline-card:nth-child(2) .timeline-year-badge,
+.timeline-card:nth-child(3) .timeline-year-badge,
+.timeline-card:nth-child(4) .timeline-year-badge {
+    background: linear-gradient(135deg, #007bff, #0056b3) !important;
+}
+
+.timeline-card:nth-child(5) .timeline-year-badge {
+    background: linear-gradient(135deg, #ffc107, #e0a800) !important;
+}
+
+.timeline-card:nth-child(6) .timeline-year-badge,
+.timeline-card:nth-child(7) .timeline-year-badge,
+.timeline-card:nth-child(8) .timeline-year-badge,
+.timeline-card:nth-child(9) .timeline-year-badge {
+    background: linear-gradient(135deg, #28a745, #1e7e34) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .timeline-card {
+        margin-bottom: 1.5rem;
+    }
+    
+    .timeline-year-badge {
+        min-width: 70px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .timeline-section .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+}
