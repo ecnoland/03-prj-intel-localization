@@ -13,7 +13,7 @@
             <body>
             
               <!-- Header / Hero Section -->
-                <header>
+                <header id="main-content">
                     <div>
                           <img src="img/intel-header-logo.svg" alt="Intel Corporation - Leading technology innovation and sustainability initiatives" />
                                 <!-- Main Heading -->
@@ -71,7 +71,7 @@
                                                                                                                                                                                                                                                                                                               <div>
                                                                                                                                                                                                                                                                                                                     <h2>1985</h2>
                                                                                                                                                                                                                                                                                                                           <h3>386 Processor</h3>
-                                                                                                                                                                                                                                                                                                                                <img src="img/4.jpg" alt="Placeholder Image" />
+                                                                                                                                                                                                                                                                                                                                <img src="img/4.jpg" alt="Intel 386 processor from 1985, introducing 32-bit architecture and advanced multitasking capabilities" />
                                                                                                                                                                                                                                                                                                                                       <p>
                                                                                                                                                                                                                                                                                                                                               Intel introduces the 386 processor with 32-bit architecture, 
                                                                                                                                                                                                                                                                                                                                                       ushering in a new era of performance and multitasking for 
@@ -367,8 +367,124 @@
                         </div>
                     </div>
                 </footer>
-                
-                <!-- Bootstrap JS Bundle -->
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+                     <!-- Bootstrap JS Bundle -->
+              <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+              
+              <!-- Custom JavaScript for Accessibility and Form Validation -->
+              <script>
+                // Form validation and accessibility enhancements
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.querySelector('.subscription-form');
+                    const emailInput = document.getElementById('email');
+                    
+                    // Email validation
+                    function validateEmail(email) {
+                        const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        return re.test(email);
+                    }
+                    
+                    // Real-time validation
+                    emailInput.addEventListener('input', function() {
+                        const email = this.value;
+                        const isValid = validateEmail(email);
+                        
+                        if (email.length > 0) {
+                            if (isValid) {
+                                this.classList.remove('is-invalid');
+                                this.classList.add('is-valid');
+                                this.setAttribute('aria-invalid', 'false');
+                            } else {
+                                this.classList.remove('is-valid');
+                                this.classList.add('is-invalid');
+                                this.setAttribute('aria-invalid', 'true');
+                            }
+                        } else {
+                            this.classList.remove('is-valid', 'is-invalid');
+                            this.removeAttribute('aria-invalid');
+                        }
+                    });
+                    
+                    // Form submission
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        
+                        const email = emailInput.value;
+                        const isValid = validateEmail(email);
+                        
+                        if (!isValid) {
+                            emailInput.classList.add('is-invalid');
+                            emailInput.setAttribute('aria-invalid', 'true');
+                            emailInput.focus();
+                            return;
+                        }
+                        
+                        // Get selected interests
+                        const interests = Array.from(form.querySelectorAll('input[name="interests[]"]:checked'))
+                            .map(cb => cb.value);
+                        
+                        // Success feedback
+                        const submitBtn = form.querySelector('.subscribe-btn');
+                        const originalContent = submitBtn.innerHTML;
+                        
+                        submitBtn.innerHTML = '<i class="bi bi-check-circle me-2"></i>Subscribed!';
+                        submitBtn.disabled = true;
+                        submitBtn.setAttribute('aria-label', 'Successfully subscribed to newsletter');
+                        
+                        // Announce success to screen readers
+                        const announcement = document.createElement('div');
+                        announcement.setAttribute('aria-live', 'polite');
+                        announcement.setAttribute('aria-atomic', 'true');
+                        announcement.className = 'sr-only';
+                        announcement.textContent = 'Successfully subscribed to Intel sustainability newsletter';
+                        document.body.appendChild(announcement);
+                        
+                        // Reset form after 3 seconds
+                        setTimeout(() => {
+                            form.reset();
+                            submitBtn.innerHTML = originalContent;
+                            submitBtn.disabled = false;
+                            submitBtn.removeAttribute('aria-label');
+                            emailInput.classList.remove('is-valid', 'is-invalid');
+                            emailInput.removeAttribute('aria-invalid');
+                            document.body.removeChild(announcement);
+                        }, 3000);
+                    });
+                    
+                    // Enhance keyboard navigation
+                    const focusableElements = document.querySelectorAll(
+                        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+                    );
+                    
+                    // Skip to main content functionality
+                    const skipLink = document.createElement('a');
+                    skipLink.href = '#main-content';
+                    skipLink.textContent = 'Skip to main content';
+                    skipLink.className = 'sr-only';
+                    skipLink.style.cssText = `
+                        position: absolute;
+                        top: -40px;
+                        left: 6px;
+                        background: #0071c5;
+                        color: white;
+                        padding: 8px;
+                        text-decoration: none;
+                        border-radius: 4px;
+                        z-index: 9999;
+                        transition: top 0.3s;
+                    `;
+                    
+                    skipLink.addEventListener('focus', function() {
+                        this.style.top = '6px';
+                        this.classList.remove('sr-only');
+                    });
+                    
+                    skipLink.addEventListener('blur', function() {
+                        this.style.top = '-40px';
+                        this.classList.add('sr-only');
+                    });
+                    
+                    document.body.insertBefore(skipLink, document.body.firstChild);
+                });
+              </script>
             </body>
             </html>
