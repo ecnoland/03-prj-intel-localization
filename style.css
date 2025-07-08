@@ -426,3 +426,56 @@ a:focus-visible {
         padding-right: 15px;
     }
 }
+
+/* Timeline Left-to-Right Override */
+.timeline-section[dir="ltr"] {
+    direction: ltr;
+    text-align: left;
+}
+
+.timeline-section[dir="ltr"] .text-center {
+    text-align: center !important;
+}
+
+.timeline-section[dir="ltr"] .timeline-card .card-body {
+    text-align: left;
+}
+
+.timeline-section[dir="ltr"] .timeline-year-badge {
+    text-align: center;
+}
+
+/* Ensure proper ordering for timeline cards in LTR */
+.timeline-section[dir="ltr"] .row {
+    flex-direction: row;
+}
+
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(1) { order: 1; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(2) { order: 2; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(3) { order: 3; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(4) { order: 4; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(5) { order: 5; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(6) { order: 6; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(7) { order: 7; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(8) { order: 8; }
+.timeline-section[dir="ltr"] .col-lg-4:nth-child(9) { order: 9; }
+
+/* Responsive ordering for medium screens (2 cards per row) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(1) { order: 1; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(2) { order: 2; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(3) { order: 3; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(4) { order: 4; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(5) { order: 5; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(6) { order: 6; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(7) { order: 7; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(8) { order: 8; }
+    .timeline-section[dir="ltr"] .col-md-6:nth-child(9) { order: 9; }
+}
+
+/* Small screens remain in chronological order naturally */
+@media (max-width: 767.98px) {
+    .timeline-section[dir="ltr"] .col-sm-12 {
+        order: initial;
+    }
+}
